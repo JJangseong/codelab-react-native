@@ -1,11 +1,16 @@
-import {StatusBar} from 'expo-status-bar';
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Platform} from 'react-native';
 import styled from 'styled-components/native';
+import Constants from 'expo-constants';
 
 const Container = styled.SafeAreaView`
   flex: 1;
+  padding-top: ${Constants.statusBarHeight}px;
 `;
+
+const KeyboardAvoidingView = styled.KeyboardAvoidingView`
+    flex: 1;
+`
 
 const Contents = styled.ScrollView`
   flex: 1;
@@ -42,19 +47,35 @@ const TempText = styled.Text`
 `
 
 export default function App() {
+    const [list, setList] = useState([
+        {id: 1, todo: '할 일 1'}
+    ])
+    const [inputTodo, setInputTodo] = useState()
     return (
         <Container>
-            <Contents>
-                <TodoItem>
-                    <TodoItemText>할 일 목룍 표시</TodoItemText>
-                    <TodoItemButton title="삭제" onPress={() => {}}/>
-                </TodoItem>
-            </Contents>
-            <InputContainer>
-                <Input/>
-                <Button title="전송" onPress={() => {
-                }}/>
-            </InputContainer>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                <Contents>
+                    {
+                        list.map(({id, todo}) => {
+                            return (
+                                <TodoItem key={id}>
+                                    <TodoItemText>{todo}</TodoItemText>
+                                    <TodoItemButton title="삭제" onPress={() => {
+                                        setList(list.filter((item => item.id !== id)))
+                                    }}/>
+                                </TodoItem>
+                            )
+                        })
+                    }
+                </Contents>
+                <InputContainer>
+                    <Input value={inputTodo} onChangeText={setInputTodo}/>
+                    <Button title="전송" onPress={() => {
+                        setList([...list, {id: new Date().getTime().toString(), todo: inputTodo}])
+                        setInputTodo("")
+                    }}/>
+                </InputContainer>
+            </KeyboardAvoidingView>
         </Container>
     );
 }

@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Platform} from 'react-native';
 import styled from 'styled-components/native';
 import Constants from 'expo-constants';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import _ from "lodash";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -46,22 +48,47 @@ const TempText = styled.Text`
     margin-bottom: 12px;
 `
 
+const Check = styled.TouchableOpacity`
+    margin-right: 4px;
+`
+
+const CheckIcon = styled.Text`
+    font-size: 20px
+`
+
 export default function App() {
-    const [list, setList] = useState([
-        {id: 1, todo: '할 일 1'}
-    ])
+    const [list, setList] = useState([])
     const [inputTodo, setInputTodo] = useState()
+
+   useEffect(() => {
+       AsyncStorage.getItem('list')
+           .then( data => {
+               if(data) setList(JSON.parse(data))
+           })
+           .catch(e => {alert(e.message)})
+   }, [])
+
+    const store = (newList)=> {
+        setList(newList);
+        AsyncStorage.setItem('list', JSON.stringify(newList))
+    }
+
     return (
         <Container>
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
                 <Contents>
                     {
-                        list.map(({id, todo}) => {
+                        list.map(({id, todo, done}) => {
                             return (
                                 <TodoItem key={id}>
+                                    <Check onPress={() => {
+                                        store(list.map(item => item.id === id ? {...item, done: !done} : {...item}))
+                                    }}>
+                                        <CheckIcon>{done ? '✅' : "☑️" }</CheckIcon>
+                                    </Check>
                                     <TodoItemText>{todo}</TodoItemText>
                                     <TodoItemButton title="삭제" onPress={() => {
-                                        setList(list.filter((item => item.id !== id)))
+                                        store( _.reject(list, element => element.id === id) )
                                     }}/>
                                 </TodoItem>
                             )
@@ -71,7 +98,8 @@ export default function App() {
                 <InputContainer>
                     <Input value={inputTodo} onChangeText={setInputTodo}/>
                     <Button title="전송" onPress={() => {
-                        setList([...list, {id: new Date().getTime().toString(), todo: inputTodo}])
+                        const newTodo =[...list, {id: new Date().getTime().toString(), todo: inputTodo, done: false}]
+                        store(newTodo)
                         setInputTodo("")
                     }}/>
                 </InputContainer>

@@ -4,6 +4,7 @@ import Contents from "../components/Contents";
 import Button from "../components/Button";
 import styled from "styled-components/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import _ from 'lodash'
 
 const ListItem = styled.TouchableOpacity`
     width: 100%;
@@ -38,9 +39,9 @@ function List({navigation}) {
        <Container>
            <Contents >
                {
-                   list.map(({date}) => {
+                   _.sortBy(list, 'date').map(({date, text}) => {
                       return (
-                          <ListItem key={date} onPress={() => navigation.navigate("Detail")} >
+                          <ListItem key={date} onPress={() => navigation.navigate("Detail",{date, text})} >
                               <Label>{date}</Label>
                           </ListItem>
                       )

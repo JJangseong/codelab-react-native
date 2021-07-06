@@ -8,8 +8,7 @@
 import "react-native-gesture-handler";
 import React from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import BoxOffice from "./pages/BoxOffice";
+import AppNavigator from "./navigators/AppNavigator";
 
 const Theme = {
   ...DefaultTheme,
@@ -19,15 +18,11 @@ const Theme = {
   },
 };
 
-const Stack = createStackNavigator();
-
 const App: () => Node = () => {
   return (
     <>
       <NavigationContainer theme={Theme}>
-        <Stack.Navigator>
-          <Stack.Screen name="BoxOffice" component={BoxOffice} options={{ headerShown: false }}/>
-        </Stack.Navigator>
+        <AppNavigator />
       </NavigationContainer>
     </>
   );

@@ -56,7 +56,9 @@ function BoxOffice(props) {
         {
           list.map(movie => {
             return (
-              <ListItem key={movie.movieCd}>
+              <ListItem key={movie.movieCd} onPress={() => {
+                props.navigation.navigate('MovieDetail', {movieCd: movie.movieCd})
+              }}>
                 <Rank>{movie.rank}</Rank>
                 <MovieName>{movie.movieNm}</MovieName>
               </ListItem>

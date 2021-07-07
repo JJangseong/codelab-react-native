@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import axios from "axios";
 import { ActivityIndicator } from "react-native";
 import moment from 'moment'
+import Title from "../components/Title";
+import Constants from "../Constants";
+import fetch from "../net/fetch";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -10,12 +12,6 @@ const Container = styled.SafeAreaView`
 
 const Contents = styled.ScrollView`
   flex: 1;
-`;
-
-const Title = styled.Text`
-  font-size: 24px;
-  font-weight: bold;
-  margin: 12px;
 `;
 
 const Description = styled.Text`
@@ -55,8 +51,8 @@ function MovieDetail(props) {
   const [info, setInfo] = useState(null);
   useEffect(() => {
     const movieCd = props.route.params.movieCd;
-    axios.get("https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=8ea0b3b2558da6365800af563e45aca6&movieCd=" + movieCd)
-      .then(({ data }) => {
+    fetch(`https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=${Constants.key}&movieCd=${movieCd}`)
+      .then(( data ) => {
         setInfo(data.movieInfoResult.movieInfo);
       })
       .catch(error => alert(error.message));

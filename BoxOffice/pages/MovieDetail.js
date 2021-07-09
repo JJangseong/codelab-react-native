@@ -47,6 +47,8 @@ const HeaderTitle = styled.Text`
   font-weight: bold;
 `
 
+const Temp = styled.Button``
+
 function MovieDetail(props) {
   const [info, setInfo] = useState(null);
   useEffect(() => {
@@ -79,7 +81,9 @@ function MovieDetail(props) {
             <Description>출현 : {info.actors.map(item => item.peopleNm).join(', ')}</Description>
           </>
         )}
-
+      <Temp title="재이동" onPress={() => {
+        props.navigation.navigate("BoxOffice")
+      }}/>
       </Contents>
     </Container>
   );

@@ -61,12 +61,14 @@ const App: () => Node = () => {
 
               const params = new FormData();
               params.append('image', response.data)
-              axios.post('https://api.imgur.com/3/upload', params, config)
+              axios.post('https://api.imgur.com/3/image', params, config)
                 .then((response) => {
-                  console.log(response.data)
+                  setUrl(response.data.data.link)
                 })
                 .catch(error => {
-                  console.log(error)
+                  console.warn(error)
+                  alert('Error : ' + error.response.data.data.error)
+                  console.log(error.response.data)
                 })
                 .finally(() => {
                   setIsLoading(false)

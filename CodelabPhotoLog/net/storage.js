@@ -4,7 +4,7 @@ import _ from "lodash";
 const KEY = "photo-logs";
 
 async function read(key) {
-  const data = await AsyncStorage.getItem("key");
+  const data = await AsyncStorage.getItem(key);
   return data ? JSON.parse(data) : [];
 }
 

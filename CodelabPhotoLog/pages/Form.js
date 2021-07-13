@@ -21,7 +21,7 @@ const Input = styled.TextInput`
   border: 1px solid #e5e5e5;
 `;
 
-function Form() {
+function Form(props) {
   const [url, setUrl] = useState(null);
   const [hashtags, setHashtags] = useState("");
   const selectImage = () => {
@@ -43,7 +43,10 @@ function Form() {
       }
       <Input placeholder="#해시태그" value={hashtags} onChangeText={value => setHashtags(value)} />
       <Button title="저장" onPress={() => {
-        storage.append({ url, hashtags });
+        storage.append({ url, hashtags })
+          .then(() => {
+            props.navigation.goBack()
+          });
       }} />
     </>
   );

@@ -17,9 +17,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "io.sung.simplediary",
+      "buildNumber": "1.0.0"
     },
     "android": {
+      "package": "io.sung.simplediary",
+      "versionCode": 10000,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
